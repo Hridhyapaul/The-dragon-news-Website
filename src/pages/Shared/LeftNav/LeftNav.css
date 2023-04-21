@@ -1,0 +1,12 @@
+.hoverable:hover{
+    background-color: #E7E7E7;
+    transition: 0.8s;
+}
+.hoverable a:hover{
+    color: #121212;
+    transition: 0.8s;
+}
+
+.text-color{
+    color:#9F9F9F
+}

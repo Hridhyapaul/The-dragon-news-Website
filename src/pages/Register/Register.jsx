@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Container, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
+import { useContext } from 'react';
+import { AuthContext } from '../../Provider/AuthProvider';
 
 
 const Register = () => {
@@ -10,6 +12,8 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [passwordSuccess, setPasswordSuccess] = useState('')
+    const [success, setSuccess] = useState('')
+    const { user, createUser, setUser } = useContext(AuthContext);
     const handleSubmit = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -17,6 +21,19 @@ const Register = () => {
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password, name)
+
+        createUser(email, password)
+            .then(result => {
+                const registerUser = result.user
+                form.reset()
+                passwordInput.reset();
+                setUser(registerUser);
+                setSuccess('Congratulations! Your account has been created successfully.')
+                console.log(registerUser);
+            })
+            .catch(error => {
+                console.log(error.message)
+            })
     };
 
     const handlePassword = (e) => {
@@ -74,6 +91,7 @@ const Register = () => {
                         <Form.Control className='bg-primary text-white fw-semibold' type="submit" value="Register" />
                     </Form.Group>
                 </Form>
+                <p className='d-flex align-items-center mt-2 gap-2'><span className='text-success'>{success}</span></p>
                 <p className='text-center'>Already have an account? <Link className='text-decoration-none text-black' to="/login">Log In</Link></p>
             </div>
         </Container>

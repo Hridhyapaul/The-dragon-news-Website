@@ -1,14 +1,43 @@
 import React from 'react';
+import { useContext } from 'react';
 import { Container, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../Provider/AuthProvider';
+import { FaExclamationCircle} from "react-icons/fa";
+import { useState } from 'react';
 
 const Login = () => {
+    const { login, setUser } = useContext(AuthContext)
+    const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
+    const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location)
+
+    const from = location.state?.from?.pathname || '/category/0'
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password)
+
+        login(email, password)
+            .then(result => {
+                const loginUser = result.user;
+                setUser(loginUser);
+                form.reset();
+                navigate(from, {replace: true});
+                setError('')
+                console.log(loginUser);
+            })
+            .catch(error => {
+                if (error) {
+                    setError(error.message)
+                    console.log(error.message)
+                }
+            })
     }
     return (
         <Container style={{ width: '500px', backgroundColor: '#F1F5F9' }} className='rounded-2'>
@@ -32,7 +61,10 @@ const Login = () => {
                         <Form.Control className='bg-primary text-white fw-semibold' type="submit" value="Login" />
                     </Form.Group>
                 </Form>
+                {error && <p className='d-flex align-items-center mt-2 gap-2'><FaExclamationCircle className='text-danger'></FaExclamationCircle> <span className='text-danger'>{error}</span></p>}
+
                 <p className='text-center'>New user? <Link className='text-decoration-none text-black' to="/register">Create an Account</Link></p>
+
             </div>
         </Container>
     );

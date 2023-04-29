@@ -4,10 +4,12 @@ import { Card, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaRegBookmark, FaShareAlt, FaRegEye, FaRegStar, FaStar } from "react-icons/fa";
 import Rating from 'react-rating';
+import { useContext } from 'react';
+import { AuthContext } from '../../../Provider/AuthProvider';
 
 const NewsCard = ({ news }) => {
     const { _id, title, rating, image_url, details, author, total_view } = news
-    const user = null;
+    const {user} = useContext(AuthContext);
     return (
         <Card className="mb-4">
             <Card.Header className='d-flex align-items-center justify-content-between'>
@@ -28,7 +30,7 @@ const NewsCard = ({ news }) => {
                 <Card.Img variant="top" src={image_url} className='mb-3' />
                 <Card.Text>
                     {
-                        details.length < 250 ? <>{details}</> : <>{details.slice(0, 250)}...<Link className='ms-3 text-decoration-none' to={!user? "/login": `/news/${_id}`}><p className=' mt-2 mb-0 text-warning'>Read More</p></Link> </>
+                        details.length < 250 ? <>{details}</> : <>{details.slice(0, 250)}...<Link className='ms-3 text-decoration-none' to={`/news/${_id}`}><p className=' mt-2 mb-0 text-warning'>Read More</p></Link> </>
                     }
                 </Card.Text>
             </Card.Body>

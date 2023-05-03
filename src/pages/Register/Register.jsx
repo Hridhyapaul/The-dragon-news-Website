@@ -8,12 +8,13 @@ import { AuthContext } from '../../Provider/AuthProvider';
 
 
 const Register = () => {
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [accepted, setAccepted]  = useState(false);
     const [passwordError, setPasswordError] = useState('');
     const [passwordSuccess, setPasswordSuccess] = useState('')
     const [success, setSuccess] = useState('')
-    const { user, createUser, setUser } = useContext(AuthContext);
+    const { createUser, setUser } = useContext(AuthContext);
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -26,15 +27,17 @@ const Register = () => {
             .then(result => {
                 const registerUser = result.user
                 form.reset()
-                passwordInput.reset();
                 setUser(registerUser);
                 setSuccess('Congratulations! Your account has been created successfully.')
-                console.log(registerUser);
             })
             .catch(error => {
                 console.log(error.message)
             })
     };
+
+    const handleAccepted = (event) => {
+        setAccepted(event.target.checked)
+    }
 
     const handlePassword = (e) => {
         const passwordInput = e.target.value;
@@ -56,7 +59,10 @@ const Register = () => {
             setPasswordError('');
             setPasswordSuccess('Good');
         }
-    }
+
+    };
+
+
     return (
         <Container style={{ width: '500px', backgroundColor: '#F1F5F9' }} className='rounded-2'>
             <div className='pt-3 pb-4 px-3 mt-5'>
@@ -85,10 +91,15 @@ const Register = () => {
                         }
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                        <Form.Check type="checkbox" label="Accept Term & Conditions" />
+                        <Form.Check 
+                        onClick={handleAccepted} 
+                        type="checkbox" 
+                        name="accept" 
+                        label={<>Accept <Link to="/terms">Term & Conditions</Link></>} 
+                        />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Control className='bg-primary text-white fw-semibold' type="submit" value="Register" />
+                        <Form.Control className='bg-primary text-white fw-semibold' type="submit" disabled={!accepted} value="Register" />
                     </Form.Group>
                 </Form>
                 <p className='d-flex align-items-center mt-2 gap-2'><span className='text-success'>{success}</span></p>

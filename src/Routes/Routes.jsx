@@ -8,6 +8,7 @@ import LoginLayout from "../layouts/LoginLayout";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import PrivateRoute from "../pages/News/PrivateRoute/PrivateRoute";
+import Terms from "../pages/Shared/Terms/Terms";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>
+      },
+      {
+        path: "/terms",
+        element: <Terms></Terms>
       }
     ]
   },
@@ -35,7 +40,7 @@ const router = createBrowserRouter([
       {
         path: ":id",
         element: <Category></Category>,
-        loader: ({params}) => fetch(`http://localhost:4000/categories/${params.id}`)
+        loader: ({params}) => fetch(`https://the-news-dragon-server-hridhyapaul.vercel.app/categories/${params.id}`)
       }
     ]
   },
@@ -46,7 +51,7 @@ const router = createBrowserRouter([
       {
         path: ":id",
         element: <PrivateRoute><News></News></PrivateRoute>,
-        loader: ({params}) => fetch(`http://localhost:4000/news/${params.id}`)
+        loader: ({params}) => fetch(`https://the-news-dragon-server-hridhyapaul.vercel.app/news/${params.id}`)
       }
     ]
   }
